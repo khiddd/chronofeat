@@ -381,11 +381,11 @@ recursive_forecast_dt <- function(model_obj,
         if (nrow(xr_match) == 1L) {
           xr_match
         } else {
-          # Missing xreg: create row with NAs
+          # Missing xreg: create row with type-aware NAs
           exclude_cols <- if (!is.null(groups_chr)) c(groups_chr, date_col) else date_col
           xr_template <- XF_grp[1, , drop = FALSE]
           for (mc in setdiff(names(xr_template), exclude_cols)) {
-            xr_template[[mc]] <- NA_real_
+            xr_template[[mc]] <- .typed_na(xr_template[[mc]])
           }
           xr_template
         }

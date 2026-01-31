@@ -288,12 +288,18 @@ TimeSeries <- function(data, date, groups = NULL, frequency = NULL, auto_detect 
   if (isTRUE(fill_time)) {
     step_size <- .frequency_to_by(frequency)
 
+    # Check for NA dates before completing grid
+    if (any(is.na(data[[date]]))) {
+      stop("Cannot complete time grid: NA values found in date column '", date, "'. ",
+           "Remove or impute NA dates before using fill_time=TRUE.")
+    }
+
     if (!is.null(groups) && length(groups) > 0) {
       # Grouped data: complete grid per group
       data <- data %>%
         dplyr::group_by(dplyr::across(dplyr::all_of(groups))) %>%
         tidyr::complete(
-          !!rlang::sym(date) := seq(min(!!rlang::sym(date)), max(!!rlang::sym(date)), by = step_size)
+          !!rlang::sym(date) := seq(min(!!rlang::sym(date), na.rm = TRUE), max(!!rlang::sym(date), na.rm = TRUE), by = step_size)
         ) %>%
         dplyr::ungroup()
 
@@ -309,7 +315,7 @@ TimeSeries <- function(data, date, groups = NULL, frequency = NULL, auto_detect 
       # Ungrouped data: complete grid globally
       data <- data %>%
         tidyr::complete(
-          !!rlang::sym(date) := seq(min(!!rlang::sym(date)), max(!!rlang::sym(date)), by = step_size)
+          !!rlang::sym(date) := seq(min(!!rlang::sym(date), na.rm = TRUE), max(!!rlang::sym(date), na.rm = TRUE), by = step_size)
         )
     }
 

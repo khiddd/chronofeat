@@ -38,7 +38,22 @@ coerce_numeric_col <- function(df, col) {
       ), call. = FALSE)
     }
   }
+
   df
+}
+
+# Return a type-appropriate NA value for a given vector
+# @param x A vector of any type
+# @return A single NA value matching the type of x
+.typed_na <- function(x) {
+  if (is.factor(x)) return(factor(NA, levels = levels(x)))
+  if (inherits(x, "Date")) return(as.Date(NA))
+  if (inherits(x, "POSIXt")) return(as.POSIXct(NA))
+  if (is.integer(x)) return(NA_integer_)
+  if (is.numeric(x)) return(NA_real_)
+  if (is.logical(x)) return(NA)
+  if (is.character(x)) return(NA_character_)
+  return(NA)
 }
 
 # Determine if a date is the end of month (no lubridate dependency)
@@ -236,7 +251,7 @@ coerce_numeric_col <- function(df, col) {
       mutate(holiday = 0L) %>%
       left_join(hol %>% mutate(holiday = 1L), by = date_col) %>%
       mutate(holiday = coalesce(holiday.y, holiday.x)) %>%
-      select(-ends_with(".x"), -ends_with(".y"))
+      select(-any_of(c("holiday.x", "holiday.y")))
   }
   result
 }
@@ -432,11 +447,9 @@ list_to_named_list <- function(vec, fn_gen, name_gen) {
   # Remove first element (last_date itself)
   candidates <- candidates[-1]
 
-  # Filter out weekends using abbreviated weekday names
-  # Handle multiple locales
-  weekday_abbrevs <- weekdays(candidates, abbreviate = TRUE)
-  weekend_patterns <- c("Sat", "Sun", "Sa", "So", "sam", "dim", "Sab", "Dom")
-  is_weekend <- weekday_abbrevs %in% weekend_patterns
+  # Filter out weekends using numeric wday (0=Sunday, 6=Saturday) for locale-independence
+  wday_values <- as.POSIXlt(candidates)$wday
+  is_weekend <- wday_values %in% c(0, 6)
 
   business_days <- candidates[!is_weekend]
 

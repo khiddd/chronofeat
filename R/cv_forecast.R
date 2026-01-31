@@ -235,8 +235,21 @@ cv_forecast <- function(formula,
 
     if (is.null(fc)) next
 
-    # Merge with actuals
-    fc_col <- names(fc)[!names(fc) %in% c(date_col, groups_chr)]
+    # Merge with actuals - identify forecast column(s)
+    fc_cols <- names(fc)[!names(fc) %in% c(date_col, groups_chr)]
+
+    if (length(fc_cols) == 0) {
+      warning(sprintf("Fold %d: No forecast columns found", i))
+      next
+    }
+
+    # Use first forecast column if multiple (e.g., intervals returned)
+    # Prefer column matching target name, otherwise use first
+    fc_col <- if (target_col %in% fc_cols) {
+      target_col
+    } else {
+      fc_cols[1]
+    }
 
     join_by_cols <- if (!is.null(groups_chr)) c(date_col, groups_chr) else date_col
 
