@@ -313,15 +313,34 @@ TimeSeries <- function(data, date, groups = NULL, frequency = NULL, auto_detect 
         )
     }
 
-    n_added <- nrow(data) - n_orig
+    n_after_complete <- nrow(data)
+    n_weekends_removed <- 0L
+
+    # For businessday frequency, filter out weekends (Saturday=6, Sunday=0 in wday)
+    if (identical(frequency, "businessday")) {
+      wday_values <- as.POSIXlt(data[[date]])$wday
+      is_weekend <- wday_values %in% c(0, 6)
+      n_weekends_removed <- sum(is_weekend)
+      data <- data[!is_weekend, ]
+    }
+
+    n_added <- n_after_complete - n_orig
+    n_net_change <- nrow(data) - n_orig
     time_fill_meta <- list(
       n_added = n_added,
+      n_weekends_removed = n_weekends_removed,
+      n_net_change = n_net_change,
       by = step_size,
       n_total = nrow(data)
     )
 
-    if (n_added > 0) {
-      message("Time grid completed: ", n_added, " rows added (step size: ", step_size, ")")
+    if (n_added > 0 || n_weekends_removed > 0) {
+      msg <- sprintf("Time grid completed: %d rows added", n_added)
+      if (n_weekends_removed > 0) {
+        msg <- sprintf("%s, %d weekend rows removed", msg, n_weekends_removed)
+      }
+      msg <- sprintf("%s (step size: %s)", msg, step_size)
+      message(msg)
     }
   }
 
@@ -625,9 +644,10 @@ print.TimeSeries <- function(x, ...) {
 
   if (abs(median_diff_days - 1) < 0.5) {
     # Could be daily or business day - check weekend pattern if data available
+    # Use numeric wday (0=Sunday, 6=Saturday) for locale-independence
     if (!is.null(data) && !is.null(date)) {
-      weekdays_in_data <- weekdays(data[[date]], abbreviate = TRUE)
-      has_weekends <- any(weekdays_in_data %in% c("Sat", "Sun", "Sa", "So", "sam", "dim"))
+      wday_values <- as.POSIXlt(data[[date]])$wday
+      has_weekends <- any(wday_values %in% c(0, 6))
       if (!has_weekends) {
         return("businessday")
       }
@@ -659,8 +679,8 @@ print.TimeSeries <- function(x, ...) {
   if (abs(median_diff_days - 1) < tol) {
     # Could be daily or business day - check weekend pattern if data available
     if (!is.null(data) && !is.null(date)) {
-      weekdays_in_data <- weekdays(data[[date]], abbreviate = TRUE)
-      has_weekends <- any(weekdays_in_data %in% c("Sat", "Sun", "Sa", "So", "sam", "dim"))
+      wday_values <- as.POSIXlt(data[[date]])$wday
+      has_weekends <- any(wday_values %in% c(0, 6))
       if (!has_weekends) {
         return("businessday")
       }

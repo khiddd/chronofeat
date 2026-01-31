@@ -112,6 +112,24 @@ cv_forecast <- function(formula,
          "Specify the number of observations to use in each training window.")
   }
 
+  # Validate numeric parameters
+  if (!is.numeric(h) || length(h) != 1 || h < 1 || h != as.integer(h)) {
+    stop("'h' must be a positive integer")
+  }
+  if (!is.numeric(n_windows) || length(n_windows) != 1 || n_windows < 1 || n_windows != as.integer(n_windows)) {
+    stop("'n_windows' must be a positive integer")
+  }
+  if (!is.null(window_size)) {
+    if (!is.numeric(window_size) || length(window_size) != 1 || window_size < 1 || window_size != as.integer(window_size)) {
+      stop("'window_size' must be a positive integer")
+    }
+  }
+  if (!is.null(step_size)) {
+    if (!is.numeric(step_size) || length(step_size) != 1 || step_size < 1 || step_size != as.integer(step_size)) {
+      stop("'step_size' must be a positive integer")
+    }
+  }
+
   # Prepare data
   DF <- if (inherits(data, "TimeSeries")) data$data else data
   date_col <- if (inherits(data, "TimeSeries")) (if (is.null(date)) data$date else date) else date
@@ -236,6 +254,12 @@ cv_forecast <- function(formula,
 
     # Calculate metrics
     metric_value <- metric_fn(eval_data[[target_col]], eval_data[[fc_col]])
+
+    # Validate metric return value
+    if (!is.numeric(metric_value) || length(metric_value) != 1) {
+      stop("Custom metric function must return a single numeric value. ",
+           "Got ", class(metric_value)[1], " of length ", length(metric_value))
+    }
 
     results[[i]] <- data.frame(
       fold = i,
