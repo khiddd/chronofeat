@@ -1,266 +1,102 @@
-# chronofeat: Time-Based Feature Engineering for Forecasting
 
-A flexible, formula-based interface for time series feature engineering and forecasting. Automatically generates temporal features from a concise specification. Model-agnostic: works with any R model that accepts a fit/predict interface.
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# chronofeat
+
+<img src="man/figures/logo.png" align="center" height="139" alt="chronofeat logo" />
+
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/taf-society/chronofeat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/taf-society/chronofeat/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/taf-society/chronofeat/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/taf-society/chronofeat/actions/workflows/pkgdown.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/taf-society/chronofeat/graph/badge.svg)](https://app.codecov.io/gh/taf-society/chronofeat)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
+
+**chronofeat** is an R package for time-based feature engineering and
+forecasting. It provides a flexible, formula-based interface for
+creating temporal features (lags, moving averages, rolling statistics,
+calendar features) and works with any R model that has a fit/predict
+interface.
+
+## Features
+
+- **Formula-based feature specification**: Define features using
+  intuitive syntax like `value ~ p(12) + q(7) + month()`
+- **Model-agnostic**: Works with lm, glm, xgboost, lightgbm,
+  randomForest, or any custom model
+- **Recursive multi-step forecasting**: Automatically generates features
+  at each forecast step
+- **Panel data support**: Handle multiple time series with proper group
+  boundaries
+- **C++ acceleration**: Fast recursive forecasting via cpp11
+
+## About TAFS
+
+**TAFS (Time Series Analysis and Forecasting Society)** is a non-profit
+association (“Verein”) in Vienna, Austria. It connects academics,
+experts, practitioners, and students focused on time-series,
+forecasting, and decision science. Contributions remain fully open
+source. Learn more at [taf-society.org](https://taf-society.org/).
 
 ## Installation
 
-```r
-# Install from GitHub (development version)
-# devtools::install_github("quantics/chronofeat")
+The development version from [GitHub](https://github.com/) with:
 
-# Or install from source
-devtools::install()
+``` r
+# install.packages("remotes")
+remotes::install_github("taf-society/chronofeat")
 ```
-
-## Key Features
-
-- **Formula-based interface**: Specify features using concise special syntax
-- **Automatic feature engineering**: Lags, moving averages, rolling statistics, calendar features
-- **Model-agnostic**: Works with any R model via simple fit/predict interface
-- **Multi-group forecasting**: Hierarchical forecasting with automatic group handling
-- **Recursive multi-step prediction**: Proper handling of lag features in forecasting
 
 ## Quick Start
 
-```r
+``` r
 library(chronofeat)
-library(dplyr)
 
-# Define your model (any model with fit/predict interface)
-my_model <- list(
-  fit = function(y, X, ...) {
-    if (ncol(X) > 0) {
-      X_mat <- model.matrix(~ ., data = X)
-    } else {
-      X_mat <- matrix(1, nrow = length(y), ncol = 1)
-      colnames(X_mat) <- "(Intercept)"
-    }
-    lm.fit(x = X_mat, y = y)
-  },
-  predict = function(object, newdata, ...) {
-    if (ncol(newdata) > 0) {
-      X_new <- model.matrix(~ ., data = newdata)
-    } else {
-      X_new <- matrix(1, nrow = nrow(newdata), ncol = 1)
-      colnames(X_new) <- "(Intercept)"
-    }
-    as.numeric(X_new %*% object$coefficients)
-  }
-)
+# Load sample data
+data(retail)
 
-# Create TimeSeries object with frequency
+# Create TimeSeries object
 ts_data <- TimeSeries(retail, date = "date", groups = "items", frequency = "month")
 
-# Fit model with 12 lags, moving averages, and calendar features
-m <- fit(value ~ p(12) + q(7, 28) + month() + dow(),
-         data = ts_data,
-         model = my_model)
+# Fit a model with formula-based features
+model <- fit(
+  value ~ p(12) + q(7, 12) + month(),
+  data = ts_data,
+  model = lm
+)
 
-# Generate 24-step ahead forecast
-fc <- forecast(m, h = 24)
-
-# View forecasts
-head(fc)
+# Generate forecasts
+forecasts <- forecast(model, h = 6)
 ```
 
 ## Formula Syntax
 
-The formula interface uses special functions to specify features:
+| Syntax        | Description      |
+|---------------|------------------|
+| `p(k)`        | k lags of target |
+| `p(1, 7, 12)` | Specific lags    |
+| `q(w1, w2)`   | Moving averages  |
+| `dow()`       | Day of week      |
+| `month()`     | Month            |
+| `rollsum(w)`  | Rolling sum      |
+| `rollsd(w)`   | Rolling std dev  |
+| `trend(d)`    | Polynomial trend |
+| `lag(var, k)` | Lag of exogenous |
 
-### Target-Based Features
+## Documentation
 
-- `p(k)` - Create lag k of target (or `p(1:k)` for lags 1 through k)
-- `q(w1, w2, ...)` - Moving averages with specified windows
-- `rollsum(w1, w2)` - Rolling sums
-- `rollsd(w)` - Rolling standard deviations
-- `rollmin(w)`, `rollmax(w)` - Rolling min/max
-- `rollslope(w)` - Rolling trend slopes
-- `trend(1, 2)` - Polynomial trend features
+Visit the [package website](https://taf-society.github.io/chronofeat/)
+for:
 
-### Calendar Features
-
-- `dow()` - Day of week
-- `month()` - Month
-- `woy()` - Week of year
-- `eom()` - End of month indicator
-- `dom()` - Day of month
-
-### Exogenous Variables
-
-- `lag(var, k1, k2, ...)` - Lags of exogenous variables
-- `ma(var, w1, w2, ...)` - Moving averages of exogenous variables
-- `varname` - Include variable as-is (no transformation)
-
-## Examples
-
-### Simple Autoregressive Model
-
-```r
-m1 <- fit(sales ~ p(7),
-          data = ts_data,
-          model = my_model)
-```
-
-### With Seasonality
-
-```r
-m2 <- fit(sales ~ p(1:12) + month() + dow(),
-          data = ts_data,
-          model = my_model)
-```
-
-### With Rolling Features
-
-```r
-m3 <- fit(sales ~ p(7) + rollsum(7, 28) + rollsd(7) + month(),
-          data = ts_data,
-          model = my_model)
-```
-
-### With Exogenous Variables
-
-```r
-m4 <- fit(sales ~ p(7) + lag(price, 0, 1, 7) + lag(promotion, 0) + month(),
-          data = ts_data,
-          model = my_model)
-```
-
-## Model Specification
-
-chronofeat is model-agnostic. Simply provide a list with `fit` and `predict` functions:
-
-```r
-my_model <- list(
-  fit = function(y, X, ...) {
-    # y: response vector
-    # X: predictor data frame (factors intact)
-    # Return fitted model object
-  },
-  predict = function(object, newdata, ...) {
-    # object: fitted model from fit()
-    # newdata: data frame with predictor columns
-    # Return numeric predictions
-  }
-)
-```
-
-### Example: XGBoost Model
-
-```r
-xgb_model <- list(
-  fit = function(y, X, ...) {
-    X_mat <- model.matrix(~ . - 1, data = X)
-    dtrain <- xgboost::xgb.DMatrix(data = X_mat, label = y)
-    xgboost::xgboost(data = dtrain, nrounds = 100, verbose = 0, ...)
-  },
-  predict = function(object, newdata, ...) {
-    X_mat <- model.matrix(~ . - 1, data = newdata)
-    predict(object, xgboost::xgb.DMatrix(data = X_mat))
-  }
-)
-
-m <- fit(sales ~ p(12) + rollsum(7, 28) + month(),
-         data = ts_data,
-         model = xgb_model)
-```
-
-### Example: Random Forest Model
-
-```r
-rf_model <- list(
-  fit = function(y, X, ...) {
-    data <- cbind(y = y, X)
-    randomForest::randomForest(y ~ ., data = data, ...)
-  },
-  predict = function(object, newdata, ...) {
-    predict(object, newdata = newdata)
-  }
-)
-```
-
-## Forecasting
-
-### Basic Forecast
-
-```r
-fc <- forecast(m, h = 24)
-```
-
-### With Known Future Exogenous Variables
-
-```r
-future_data <- expand.grid(
-  date = seq(as.Date("2024-01-01"), by = "day", length.out = 30),
-  store = unique(df$store),
-  price = 9.99,
-  promotion = c(rep(1, 10), rep(0, 20))
-)
-
-fc <- forecast(m, future = future_data)
-```
-
-### Handling Missing Future Exogenous Variables
-
-```r
-fc <- forecast(m, h = 30, xreg_strategy = "carry")   # Carry last value
-fc <- forecast(m, h = 30, xreg_strategy = "zeros")   # Fill with zeros
-fc <- forecast(m, h = 30, xreg_strategy = "NA")      # Fill with NA
-```
-
-## Cross-Validation
-
-```r
-cv_results <- cv_forecast(
-  sales ~ p(12) + month(),
-  data = ts_data,
-  model = my_model,
-  h = 6,
-  n_windows = 5
-)
-
-# View metrics
-cv_results$metrics
-```
-
-## Best Practices
-
-### Choosing Lags
-
-- **Daily data**: `p(7)` or `p(1:14)` for weekly patterns
-- **Weekly data**: `p(4)` or `p(1:8)` for monthly patterns
-- **Monthly data**: `p(12)` or `p(1:24)` for annual patterns
-
-### Choosing MA Windows
-
-- **Short-term**: `q(3, 7)` for noise smoothing
-- **Medium-term**: `q(14, 28)` for trend capture
-- **Long-term**: `q(90, 180)` for seasonal smoothing
-
-### Rolling Statistics
-
-- `rollsd()` captures volatility changes
-- `rollslope()` captures trend direction
-- `rollsum()` useful for cumulative effects
-
-### Calendar Features
-
-- Always include `month()` for monthly seasonality
-- `dow()` critical for daily/weekly data
-- `eom()` useful for retail (end-of-month effects)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Citation
-
-If you use this package in your research, please cite:
-
-```
-Akay, R. (2025). chronofeat: Time-Based Feature Engineering for Forecasting.
-R package version 0.6.0.
-```
+- [Getting
+  Started](https://taf-society.github.io/chronofeat/articles/getting-started.html)
+- [Building Custom
+  Models](https://taf-society.github.io/chronofeat/articles/custom-models.html)
+- [Feature Engineering
+  Reference](https://taf-society.github.io/chronofeat/articles/feature-engineering.html)
+- [Cross-Validation](https://taf-society.github.io/chronofeat/articles/cross-validation.html)
