@@ -96,6 +96,13 @@ reference:
   contents:
   - retail
 
+- title: internal
+  contents:
+  - chronofeat
+  - print.TimeSeries
+  - print.cv_forecast
+  - summary.cv_forecast
+
 authors:
   Resul Akay:
     href: https://github.com/taf-society
@@ -109,17 +116,17 @@ articles:
 - title: Getting Started
   navbar: ~
   contents:
-  - getting-started
+  - articles/getting-started
 
 - title: Core Concepts
   navbar: ~
   contents:
-  - custom-models
-  - feature-engineering
-  - preprocessing
+  - articles/custom-models
+  - articles/feature-engineering
+  - articles/preprocessing
 
 - title: Evaluation & Production
   navbar: ~
   contents:
-  - cross-validation
-  - advanced-workflows
+  - articles/cross-validation
+  - articles/advanced-workflows

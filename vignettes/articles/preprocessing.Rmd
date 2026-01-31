@@ -31,7 +31,7 @@ library(chronofeat)
 library(dplyr)
 ```
 
----
+***
 
 ## The TimeSeries Object
 
@@ -69,7 +69,7 @@ ts_data$groups
 ts_data$date
 ```
 
----
+***
 
 ## Frequency Detection
 
@@ -114,7 +114,7 @@ ts_explicit <- TimeSeries(
 | `"year"` | Yearly | Date or POSIXct |
 | Numeric | Custom days (e.g., 7) | Date or POSIXct |
 
----
+***
 
 ## Completing the Time Grid
 
@@ -150,7 +150,7 @@ ts_complete$data
 ts_complete$time_fill_meta
 ```
 
----
+***
 
 ## Target Gap-Filling
 
@@ -289,7 +289,7 @@ Common parameters:
 - `window`: Window size for rolling_mean
 - `center`: TRUE for centered window, FALSE for right-aligned
 
----
+***
 
 ## Exogenous Gap-Filling
 
@@ -331,7 +331,7 @@ ts_xreg$data %>%
 | Seasonal patterns | `stl` |
 | Panel cold-start | `borrow` |
 
----
+***
 
 ## Complete Pipeline Example
 
@@ -369,7 +369,7 @@ ts_clean
 ts_clean$data
 ```
 
----
+***
 
 ## Metadata and Auditability
 
@@ -401,7 +401,7 @@ config <- list(
 saveRDS(config, "preprocessing_config.rds")
 ```
 
----
+***
 
 ## Integration with fit() and forecast()
 
@@ -457,7 +457,7 @@ weighted_lm_spec <- list(
 )
 ```
 
----
+***
 
 ## Best Practices
 
@@ -511,7 +511,7 @@ preprocessing_notes <- list(
 )
 ```
 
----
+***
 
 ## Warning: Trailing NA After fill_time
 
@@ -532,7 +532,7 @@ ts <- TimeSeries(
 
 **Solution**: Either specify `target_na` to fill the gaps, or ensure your data ends with non-NA target values.
 
----
+***
 
 ## Summary
 

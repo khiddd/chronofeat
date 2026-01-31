@@ -10,6 +10,8 @@ Description: A flexible, formula-based interface for time series feature enginee
     Model-agnostic: works with any R model that accepts a fit/predict interface.
     Supports multi-group panel data and recursive multi-step prediction.
 License: MIT + file LICENSE
+URL: https://taf-society.github.io/chronofeat/, https://github.com/taf-society/chronofeat
+BugReports: https://github.com/taf-society/chronofeat/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

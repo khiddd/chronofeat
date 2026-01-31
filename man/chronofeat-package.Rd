@@ -5,7 +5,18 @@
 \alias{chronofeat-package}
 \title{chronofeat: Time-Based Feature Engineering for Forecasting}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 A flexible, formula-based interface for time series feature engineering and forecasting. Automatically generates temporal features (lags, moving averages, rolling statistics, calendar features) from a concise formula specification. Model-agnostic: works with any R model that accepts a fit/predict interface. Supports multi-group panel data and recursive multi-step prediction.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://taf-society.github.io/chronofeat/}
+  \item \url{https://github.com/taf-society/chronofeat}
+  \item Report bugs at \url{https://github.com/taf-society/chronofeat/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Resul Akay \email{resul.akay@quantics.io}

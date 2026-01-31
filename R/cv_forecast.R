@@ -6,7 +6,8 @@
 #'
 #' @param formula A formula specifying the target and features (same as \code{fit()})
 #' @param data A data frame or TimeSeries object containing the time series data
-#' @param date Character string naming the date column (Date or POSIXct class)
+#' @param date Character string naming the date column (Date or POSIXct class).
+#'   Optional when `data` is a TimeSeries object (uses stored date column).
 #' @param groups Character vector naming grouping columns for panel data
 #' @param model Model specification (same as \code{fit()})
 #' @param h Forecast horizon (number of periods ahead to forecast)
@@ -90,7 +91,7 @@
 #' }
 cv_forecast <- function(formula,
                         data,
-                        date,
+                        date = NULL,
                         groups = NULL,
                         model,
                         h = 1,
@@ -109,6 +110,11 @@ cv_forecast <- function(formula,
   date_col <- if (inherits(data, "TimeSeries")) (if (is.null(date)) data$date else date) else date
   groups_chr <- if (inherits(data, "TimeSeries")) (if (is.null(groups)) data$groups else groups) else groups
   frequency <- if (inherits(data, "TimeSeries")) data$frequency else NULL
+
+  # Validate date_col
+  if (is.null(date_col)) {
+    stop("'date' argument is required when 'data' is not a TimeSeries object.")
+  }
 
   stopifnot(is.data.frame(DF))
   stopifnot(is.character(date_col), length(date_col) == 1, date_col %in% names(DF))

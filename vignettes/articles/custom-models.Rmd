@@ -70,7 +70,7 @@ m <- fit(value ~ p(12), data = ts_data, model = model_spec)
 - `y` is a numeric vector (the target column)
 - Your `predict` function must return a numeric vector
 
----
+***
 
 ## Example 1: Linear Models (lm, glm)
 
@@ -153,7 +153,7 @@ m_ridge <- fit(value ~ p(12) + month(), data = ts_data, model = glmnet_spec, alp
 m_enet <- fit(value ~ p(12) + month(), data = ts_data, model = glmnet_spec, alpha = 0.5)
 ```
 
----
+***
 
 ## Example 2: XGBoost
 
@@ -262,7 +262,7 @@ xgb_early_spec <- list(
 )
 ```
 
----
+***
 
 ## Example 3: LightGBM
 
@@ -322,7 +322,7 @@ m_lgb <- fit(
 )
 ```
 
----
+***
 
 ## Example 4: Random Forest
 
@@ -369,7 +369,7 @@ m_ranger <- fit(
 )
 ```
 
----
+***
 
 ## Example 5: Support Vector Machines
 
@@ -396,7 +396,7 @@ m_svm <- fit(
 )
 ```
 
----
+***
 
 ## Example 6: Neural Networks (Keras/TensorFlow)
 
@@ -472,7 +472,7 @@ m_keras <- fit(
 )
 ```
 
----
+***
 
 ## Example 7: Ensemble Models
 
@@ -568,7 +568,7 @@ weighted_ensemble_spec <- list(
 )
 ```
 
----
+***
 
 ## Handling Factor Variables
 
@@ -604,7 +604,7 @@ one_hot_encode <- function(X) {
 }
 ```
 
----
+***
 
 ## Prediction Intervals
 
@@ -659,7 +659,7 @@ bootstrap_intervals <- function(model, h, n_boot = 100, conf_level = 0.95) {
 }
 ```
 
----
+***
 
 ## Model Diagnostics
 
@@ -699,7 +699,7 @@ qqline(residuals)
 acf(residuals, main = "Residual ACF")
 ```
 
----
+***
 
 ## Troubleshooting Common Issues
 
@@ -761,7 +761,7 @@ X[[col]] <- as.numeric(X[[col]])
 - Simplify the model for faster predictions
 - Reduce forecast horizon
 
----
+***
 
 ## Summary
 

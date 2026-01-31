@@ -28,7 +28,7 @@ data(retail)
 ts_data <- TimeSeries(retail, date = "date", groups = "items", frequency = "month")
 ```
 
----
+***
 
 ## Target Features
 
@@ -156,7 +156,7 @@ m$predictors
 
 High-degree polynomials can extrapolate wildly. Prefer `trend(1)` or use with regularization.
 
----
+***
 
 ## Calendar Features
 
@@ -221,7 +221,7 @@ value ~ p(24) + dow() + month() + hod()  # hour of day
 
 Calendar features create factor levels. Ensure your training data covers all levels you'll encounter during forecasting. If you train on Jan-Nov and forecast into December, the `month = 12` level will be unknown and converted to NA.
 
----
+***
 ## Exogenous Variable Features
 
 Include external predictors in your model.
@@ -281,7 +281,7 @@ m <- fit(
 )
 ```
 
----
+***
 
 ## Feature Combinations
 
@@ -342,7 +342,7 @@ value ~ p(12) + q(12) + month() + dow() +
         promo + rollslope(12)
 ```
 
----
+***
 
 ## Choosing Features
 
@@ -374,7 +374,7 @@ value ~ p(12) + q(12) + month() + dow() +
 3. Add features incrementally
 4. Use cross-validation to compare
 
----
+***
 
 ## Feature Behavior During Forecasting
 
@@ -396,7 +396,7 @@ Understanding how features behave during recursive forecasting is crucial:
 - During forecasting, NA features → NA predictions for that step
 - Choose window sizes appropriate for your forecast horizon
 
----
+***
 
 ## Low-Level Feature Functions
 
@@ -444,7 +444,7 @@ df_feat <- feat_trend(
 )
 ```
 
----
+***
 
 ## Summary Table
 

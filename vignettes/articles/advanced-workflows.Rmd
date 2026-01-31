@@ -33,7 +33,7 @@ data(retail)
 ts_data <- TimeSeries(retail, date = "date", groups = "items", frequency = "month")
 ```
 
----
+***
 
 ## Hyperparameter Tuning
 
@@ -493,7 +493,7 @@ final_model <- fit(
 forecasts <- forecast(final_model, h = 12)
 ```
 
----
+***
 
 ## Model Comparison Framework
 
@@ -584,7 +584,7 @@ fold_matrix <- do.call(cbind, fold_metrics_by_model)
 friedman.test(fold_matrix)
 ```
 
----
+***
 
 ## Production Deployment
 
@@ -704,7 +704,7 @@ monitor_forecast_accuracy <- function(forecasts, actuals, threshold = 0.2) {
 }
 ```
 
----
+***
 
 ## Edge Cases and Best Practices
 
@@ -890,7 +890,7 @@ forecast_ensemble <- function(recursive_fc, direct_fc, weights = c(0.5, 0.5)) {
 }
 ```
 
----
+***
 
 ## Performance Optimization
 
@@ -951,7 +951,7 @@ process_in_batches <- function(ts_data, batch_size = 10) {
 }
 ```
 
----
+***
 
 ## Summary Checklist
 

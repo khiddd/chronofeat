@@ -7,7 +7,7 @@
 cv_forecast(
   formula,
   data,
-  date,
+  date = NULL,
   groups = NULL,
   model,
   h = 1,
@@ -25,7 +25,8 @@ cv_forecast(
 
 \item{data}{A data frame or TimeSeries object containing the time series data}
 
-\item{date}{Character string naming the date column (Date or POSIXct class)}
+\item{date}{Character string naming the date column (Date or POSIXct class).
+Optional when \code{data} is a TimeSeries object (uses stored date column).}
 
 \item{groups}{Character vector naming grouping columns for panel data}
 

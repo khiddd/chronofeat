@@ -35,7 +35,7 @@ data(retail)
 ts_data <- TimeSeries(retail, date = "date", groups = "items", frequency = "month")
 ```
 
----
+***
 
 ## Basic Usage
 
@@ -67,7 +67,7 @@ cv_results$metrics
 - Each fold shows training and test date ranges
 - `n_train` and `n_test` show observation counts
 
----
+***
 
 ## Window Types
 
@@ -122,7 +122,7 @@ cv_sliding <- cv_forecast(
 - Models that should only use recent data
 - Testing how model performs with limited history
 
----
+***
 
 ## Configuring CV
 
@@ -162,7 +162,7 @@ cv_results <- cv_forecast(..., h = 6, step_size = 6)
 cv_results <- cv_forecast(..., h = 6, step_size = 1)
 ```
 
----
+***
 
 ## Metrics
 
@@ -201,7 +201,7 @@ cv_results <- cv_forecast(
 )
 ```
 
----
+***
 
 ## Analyzing Results
 
@@ -282,7 +282,7 @@ head(group_accuracy)
 tail(group_accuracy)
 ```
 
----
+***
 
 ## Model Comparison
 
@@ -374,7 +374,7 @@ cv_xgb <- cv_forecast(
 )
 ```
 
----
+***
 
 ## Model Selection Workflow
 
@@ -466,7 +466,7 @@ print(model_comparison)
 # Test on most recent data only
 ```
 
----
+***
 
 ## Panel Data Considerations
 
@@ -525,7 +525,7 @@ group_cv <- lapply(groups, function(g) {
 group_cv_results <- do.call(rbind, group_cv)
 ```
 
----
+***
 
 ## Best Practices
 
@@ -578,7 +578,7 @@ cat("SD RMSE:", sd(fold_rmse), "\n")
 cat("Range:", min(fold_rmse), "-", max(fold_rmse), "\n")
 ```
 
----
+***
 
 ## Troubleshooting
 
@@ -614,7 +614,7 @@ cv_results <- cv_forecast(...)
 
 **Solution**: This is expected! Short-term forecasts are usually more accurate.
 
----
+***
 
 ## Summary
 
