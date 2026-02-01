@@ -526,7 +526,12 @@ cv_forecast <- function(formula,
     mape = function(actual, predicted) {
       # Guard against division by zero - exclude zero actuals
       nonzero <- actual != 0 & !is.na(actual)
-      if (sum(nonzero) == 0) return(NA_real_)
+      if (sum(nonzero) == 0) {
+        if (sum(!is.na(actual)) > 0) {
+          warning("MAPE: all actual values are zero; returning NA.", call. = FALSE)
+        }
+        return(NA_real_)
+      }
       if (sum(!nonzero & !is.na(actual)) > 0) {
         warning("MAPE: ", sum(!nonzero & !is.na(actual)),
                 " zero actual value(s) excluded from calculation", call. = FALSE)

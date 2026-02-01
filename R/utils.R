@@ -94,6 +94,13 @@ coerce_numeric_col <- function(df, col) {
   # Formula parsing already expands p(k) to 1:k, so no expansion needed here
   if (!is.null(p) && length(p) > 0 && all(p > 0)) {
     lag_indices <- as.integer(p)
+    if (isTRUE(getOption("chronofeat.warn_large_lag", TRUE))) {
+      max_lag <- suppressWarnings(max(lag_indices, na.rm = TRUE))
+      if (is.finite(max_lag) && length(y) < max_lag) {
+        warning("Maximum lag (", max_lag, ") exceeds available history (", length(y),
+                "). Lag features will be NA until sufficient history is available.", call. = FALSE)
+      }
+    }
     for (L in lag_indices) {
       nm <- paste0(target_col, "_lag_", L)
       # Align with dplyr::lag(x, n=L) semantics used during training

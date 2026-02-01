@@ -47,6 +47,36 @@ feat_lag_ma_dt <- function(df, date, target,
   target_col <- target
   groups_chr <- groups
 
+  # basic validation for direct use
+  if (!is.null(p) && length(p)) {
+    if (!is.numeric(p) || anyNA(p) || any(p <= 0) || any(p %% 1 != 0)) {
+      stop("'p' must be a vector of positive integers.", call. = FALSE)
+    }
+  }
+  if (!is.null(q) && length(q)) {
+    if (!is.numeric(q) || anyNA(q) || any(q <= 0) || any(q %% 1 != 0)) {
+      stop("'q' must be a vector of positive integers.", call. = FALSE)
+    }
+  }
+  if (!is.null(xreg_lags)) {
+    if (!is.list(xreg_lags)) stop("'xreg_lags' must be a named list.", call. = FALSE)
+    for (nm in names(xreg_lags)) {
+      vals <- xreg_lags[[nm]]
+      if (!is.numeric(vals) || anyNA(vals) || any(vals < 0) || any(vals %% 1 != 0)) {
+        stop("'xreg_lags' values must be non-negative integers (0 allowed).", call. = FALSE)
+      }
+    }
+  }
+  if (!is.null(xreg_ma)) {
+    if (!is.list(xreg_ma)) stop("'xreg_ma' must be a named list.", call. = FALSE)
+    for (nm in names(xreg_ma)) {
+      vals <- xreg_ma[[nm]]
+      if (!is.numeric(vals) || anyNA(vals) || any(vals <= 0) || any(vals %% 1 != 0)) {
+        stop("'xreg_ma' values must be positive integers.", call. = FALSE)
+      }
+    }
+  }
+
   result <- df %>% arrange(across(all_of(c(groups_chr, date_col))))
 
   # ensure numeric for rolling on target
